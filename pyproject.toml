@@ -1,0 +1,38 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blarg"
+version = "0.1.0"
+description = "My new blog"
+readme = "README.md"
+authors = [
+  {name = "Daniel Roy Greenfeld", email = "daniel@feldroy.com"},
+]
+maintainers = [
+  {name = "Daniel Roy Greenfeld", email = "daniel@feldroy.com"},
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "License :: OSI Approved :: GNU General Public License (GPL)",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12"
+]
+license = {text = "GNU General Public License v3"}
+dependencies = [
+  "jinja2",
+  "typer",
+  "rich",
+  "jinja2~=3.0",
+  "markdown~=3.2",
+  "pymdown-extensions",
+  "pygments"
+]
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[project.scripts]
+blarg = "blarg.cli:app"
