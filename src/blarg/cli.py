@@ -10,7 +10,7 @@ app = typer.Typer()
 
 
 @app.command()
-def build(source: Path, target: Path = Path('site')):
+def build(source: Path = Path('.'), target: Path = Path('site')):
     """Build the site"""
     build_site(source, target)
 

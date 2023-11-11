@@ -7,6 +7,7 @@ name = "blarg"
 version = "0.1.0"
 description = "My new blog"
 readme = "README.md"
+requires-python = ">=3.10"
 authors = [
   {name = "Daniel Roy Greenfeld", email = "daniel@feldroy.com"},
 ]
@@ -36,3 +37,8 @@ package-dir = {"" = "src"}
 
 [project.scripts]
 blarg = "blarg.cli:app"
+
+
+[project.urls]
+"Homepage" = "https://github.com/pydanny/blarg"
+"Bug Tracker" = "https://github.com/pydanny/blarg/issues"
