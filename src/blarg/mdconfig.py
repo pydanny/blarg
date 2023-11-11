@@ -1,5 +1,6 @@
 from pymdownx import emoji
 import markdown
+from pygments.formatters import HtmlFormatter
 
 extensions = [
     'markdown.extensions.tables',
@@ -39,6 +40,8 @@ extension_configs = {
     }
 }
 
-
-
 md = markdown.Markdown(extensions=extensions, extension_configs=extension_configs)
+
+def render_pygments_css(style: str='colorful'):
+    formatter = HtmlFormatter(style=style)
+    return formatter.get_style_defs()
