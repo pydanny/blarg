@@ -17,7 +17,7 @@ og_url: https://daniel.feldroy.com/posts/2023-01-configuring-sphinx-auto-doc-wit
 
 How to make it so projects with Django as a dependency benefit from Sphinx's auto-documentation features.
 
-# The Problem
+# The Problems
 
 I want to be able to document open source packages with Sphinx (ex. [xocto](https://github.com/octoenergy/xocto)) and have Sphinx automatically document the Django helpers. This isn't quite the same as documenting a Django project, so I wasn't sure if the otherwise awesome [sphinxcontrib-django](https://sphinxcontrib-django.readthedocs.io/) would be the right tool. Fortunately, there's a solution that doesn't require any additional packages.
 

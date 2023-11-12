@@ -1,12 +1,12 @@
+import importlib.metadata
 from pathlib import Path
 from subprocess import check_call
-import importlib.metadata
 
 import typer
+from rich import print
 
 from .main import build_site
 
-from rich import print
 
 app = typer.Typer()
 
@@ -21,6 +21,14 @@ def build(source: Path = Path("."), target: Path = Path("site")):
 def serve(site: Path = Path("site")):
     """Serve the site"""
     check_call(["python", "-m", "http.server", "8000", "-d", site])
+
+
+@app.command()
+def serve2(site: Path = Path("site"), port: int = 8000):
+    """Serve the site"""
+    from .server import server
+
+    server(site=site, port=port)
 
 
 @app.command()
