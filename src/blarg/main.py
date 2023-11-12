@@ -9,6 +9,7 @@ from rich.progress import track
 
 from .mdconfig import md as markdown
 from .mdconfig import render_pygments_css
+from markupsafe import Markup
 
 # Load templates
 template_env = Environment(
@@ -21,8 +22,7 @@ template_env = Environment(
 )
 
 
-def build_site(source: Path, target: Path, template: Path = "default.jinja2") -> None:
-
+def build_site(source: Path, target: Path, template: Path = "default.html") -> None:
 
     # Cleanup build directory
     try:
@@ -32,12 +32,13 @@ def build_site(source: Path, target: Path, template: Path = "default.jinja2") ->
 
     template = template_env.get_template(template)
 
-    print(f"[bold]Building {target}")
+    print(f"[bold green]Building {target}")
     articles = []
 
     pages = list(source.rglob('*/*.md'))
+    page_build_count = 0
 
-    for page in track(pages, description="Building pages"):
+    for page in track(pages, description=f"Attempting to build {len(pages)} pages"):
         if 'node_modules' in page.parts:
             continue
         # print(page)
@@ -51,15 +52,19 @@ def build_site(source: Path, target: Path, template: Path = "default.jinja2") ->
         body = markdown.convert(text)
         # try:
         try:
-            target_file.write_text(template.render(body=body, meta=yaml.safe_load(frontmatter)))
+            target_file.write_text(template.render(body=Markup(body), meta=yaml.safe_load(frontmatter)))
         except yaml.parser.ParserError:
             print(f"[bold red]Error parsing frontmatter for {page}[/bold red]")
+            continue
         except yaml.scanner.ScannerError:
             print(f"[bold red]Error scanning frontmatter for {page}[/bold red]")
+            continue
         except yaml.composer.ComposerError:
             print(f"[bold red]Error composing frontmatter for {page}[/bold red]")
+            continue
+        page_build_count += 1
 
-    # Copy CSS to render page
+    # Pygments colors
     target_css = target / 'public' / 'pygments.css'
     target_css.parent.mkdir(parents=True, exist_ok=True)
     target_css.write_text(render_pygments_css())
@@ -72,4 +77,6 @@ def build_site(source: Path, target: Path, template: Path = "default.jinja2") ->
     index += "</ul>"
     target_index = target / 'index.html'
 
-    target_index.write_text(template.render(body=index, meta={"title": "Index"}))
+    target_index.write_text(template.render(body=Markup(index), meta={"title": "Index"}))
+
+    print(f"[bold green]Done building {page_build_count} files[/bold green]")
