@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>{{ meta.title }}</title>
+<title>{{ frontmatter.title }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css" type="text/css">
 <link rel="stylesheet" href="/public/pygments.css" />
 </head>
 <body>
-  <section class="section">
-    <div class="container">
+  <section>
+<h1>{{ frontmatter.title }}</h1>
+{% if frontmatter.description %}
+<p><i>{{frontmatter.description}}</i></p>
+{% endif %}
+    <div>
 {{ body|safe }}
     </div>
   </section>

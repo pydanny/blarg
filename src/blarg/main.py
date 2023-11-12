@@ -39,7 +39,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
     pages = list(source.rglob("*/*.md"))
     page_build_count = 0
 
-    for page in track(pages, description=f"Attempting to build {len(pages)} pages"):
+    for page in track(pages, description=f"Building {len(pages)} pages"):
         if "node_modules" in page.parts:
             continue
         content = page.read_text()
@@ -53,7 +53,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
         # try:
         try:
             target_file.write_text(
-                template.render(body=Markup(body), meta=yaml.safe_load(frontmatter))
+                template.render(body=Markup(body), frontmatter=yaml.safe_load(frontmatter))
             )
         except yaml.parser.ParserError:
             print(f"[bold red]Error parsing frontmatter for {page}[/bold red]")
@@ -80,7 +80,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
     target_index = target / "index.html"
 
     target_index.write_text(
-        template.render(body=Markup(index), meta={"title": "Index"})
+        template.render(body=Markup(index), frontmatter={"title": "Index"})
     )
 
     print(f"[bold green]Done building {page_build_count} files[/bold green]")

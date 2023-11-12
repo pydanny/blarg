@@ -78,14 +78,14 @@ In one of your documentation files, perhaps `docs/localtime.rst`:
 
 Or if you are using [myst-parser](https://myst-parser.readthedocs.io/) to use Markdown with Sphinx. In this case, the file would be at `docs/localtime.md`:
 
-````markdown
+```markdown
 ```{eval-rst}
 .. automodule:: xocto.localtime
   :members:
   :undoc-members:
   :show-inheritance:
 ```
-````
+```
 
 # Come and work with me
 
