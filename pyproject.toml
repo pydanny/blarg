@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "blarg"
-version = "0.1.0"
+version = "0.2.0"
 description = "My new blog"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -33,6 +33,11 @@ dependencies = [
   "watchdog"
 ]
 
+[project.optional-dependencies]
+dev = [
+    "ruff",  # linting and formatting
+]
+
 [tool.setuptools]
 package-dir = {"" = "src"}
 
@@ -43,3 +48,37 @@ blarg = "blarg.cli:app"
 [project.urls]
 "Homepage" = "https://github.com/pydanny/blarg"
 "Bug Tracker" = "https://github.com/pydanny/blarg/issues"
+
+# Ruff
+# ----
+
+[tool.ruff]
+select = [
+    "E",  # pycodestyle
+    "F",  # pyflakes
+    "I",  # isort
+]
+ignore = [
+    "E501",  # line too long - black takes care of this for us
+]
+
+[tool.ruff.per-file-ignores]
+# Allow unused imports in __init__ files as these are convenience imports
+"**/__init__.py" = [ "F401" ]
+
+[tool.ruff.isort]
+lines-after-imports = 2
+section-order = [
+    "future",
+    "standard-library",
+    "third-party",
+    "first-party",
+    "project",
+    "local-folder",
+]
+
+[tool.ruff.isort.sections]
+"project" = [
+    "src",
+    "tests",
+]
