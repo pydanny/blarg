@@ -42,7 +42,6 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
     for page in track(pages, description=f"Attempting to build {len(pages)} pages"):
         if "node_modules" in page.parts:
             continue
-        # print(page)
         content = page.read_text()
         frontmatter, _, text = content.partition("\n---\n")
 

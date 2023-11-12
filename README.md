@@ -2,6 +2,12 @@
 
 A static site generator
 
+## Features
+
+- Fast
+- Simple
+- Easy
+
 ## Installation:
 
 ```
