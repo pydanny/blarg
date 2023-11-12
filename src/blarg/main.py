@@ -34,9 +34,10 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
     template = template_env.get_template(template)
 
     print(f"[bold green]Building {target}")
-    articles = []
+    
 
     pages = list(source.rglob("*.md"))
+    articles = [target / Path(x.name).with_suffix("") for x in pages]
     page_build_count = 0
 
     for page in track(pages, description=f"Building {len(pages)} pages"):
@@ -45,7 +46,6 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
         content = page.read_text()
         frontmatter, _, text = content.partition("\n---\n")
 
-        articles.append(target / Path(page.name).with_suffix(""))
         target_file = target / Path(page.name).with_suffix("") / Path("index.html")
         target_file.parent.mkdir(parents=True, exist_ok=True)
 
