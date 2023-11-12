@@ -3,12 +3,17 @@
 <head>
 <title>{{ frontmatter.title }}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sakura.css/css/sakura.css" type="text/css">
+<link rel="stylesheet" id="style" href="https://unpkg.com/sakura.css/css/sakura-earthly.css" media="screen" />
+<link rel="stylesheet" href="https://unpkg.com/sakura.css/css/sakura-vader.css" media="screen and (prefers-color-scheme: dark)" />
 <link rel="stylesheet" href="/public/pygments.css" />
 </head>
 <body>
   <section>
 <h1>{{ frontmatter.title }}</h1>
+<p>
+  <span onclick="document.getElementById('style').setAttribute('href', 'https://unpkg.com/sakura.css/css/sakura-earthly.css')">light</span> |
+  <span onclick="document.getElementById('style').setAttribute('href', 'https://unpkg.com/sakura.css/css/sakura-vader.css')">dark</span>
+</p>
 {% if frontmatter.description %}
 <p><i>{{frontmatter.description}}</i></p>
 {% endif %}
