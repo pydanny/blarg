@@ -36,7 +36,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
     print(f"[bold green]Building {target}")
     articles = []
 
-    pages = list(source.rglob("*/*.md"))
+    pages = list(source.rglob("*.md"))
     page_build_count = 0
 
     for page in track(pages, description=f"Building {len(pages)} pages"):

@@ -28,7 +28,7 @@ dependencies = [
   "rich",
   "jinja2~=3.0",
   "markdown~=3.2",
-  "pymdown-extensions",
+  "pymdown-extensions==10.3.1",
   "pygments",
   "watchdog"
 ]
