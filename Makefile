@@ -10,7 +10,7 @@ clean:
 # Releases
 
 # Extract version from pyproject.toml
-VERSION=$(shell python -c "import importlib.metadata; print(importlib.metadata.version('xocto'))")
+VERSION=$(shell python -c "import importlib.metadata; print(importlib.metadata.version('blarg'))")
 
 tag:
 	@echo Tagging as $(VERSION)
