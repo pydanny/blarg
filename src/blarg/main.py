@@ -5,6 +5,7 @@ import yaml
 from jinja2 import Environment, PackageLoader, select_autoescape, ChoiceLoader, FileSystemLoader
 
 from rich import print
+from rich.progress import track
 
 from .mdconfig import md as markdown
 from .mdconfig import render_pygments_css
@@ -31,10 +32,12 @@ def build_site(source: Path, target: Path, template: Path = "default.jinja2") ->
 
     template = template_env.get_template(template)
 
-    print(f"Building {target}")
+    print(f"[bold]Building {target}")
     articles = []
 
-    for page in source.rglob('*/*.md'):
+    pages = list(source.rglob('*/*.md'))
+
+    for page in track(pages, description="Building pages"):
         if 'node_modules' in page.parts:
             continue
         # print(page)
