@@ -29,7 +29,8 @@ dependencies = [
   "jinja2~=3.0",
   "markdown~=3.2",
   "pymdown-extensions",
-  "pygments"
+  "pygments",
+  "watchdog"
 ]
 
 [tool.setuptools]

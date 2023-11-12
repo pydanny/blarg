@@ -2,27 +2,34 @@ import shutil
 from pathlib import Path
 
 import yaml
-from jinja2 import Environment, PackageLoader, select_autoescape
+from jinja2 import Environment, PackageLoader, select_autoescape, ChoiceLoader, FileSystemLoader
 
 from rich import print
 
 from .mdconfig import md as markdown
 from .mdconfig import render_pygments_css
 
-
-env = Environment(
-    loader=PackageLoader("blarg"),
+# Load templates
+template_env = Environment(
+    loader=ChoiceLoader([
+            PackageLoader("blarg"),
+            FileSystemLoader('templates')
+        ]
+    ),
     autoescape=select_autoescape()
 )
 
-template = env.get_template("theme.jinja2")
+
+def build_site(source: Path, target: Path, template: Path = "default.jinja2") -> None:
 
 
-def build_site(source: Path, target: Path) -> None:
+    # Cleanup build directory
     try:
         shutil.rmtree(target)
     except FileNotFoundError:
         print("Target directory does not exist.")
+
+    template = template_env.get_template(template)
 
     print(f"Building {target}")
     articles = []
