@@ -41,3 +41,11 @@ make tag
 ```
 
 This will trigger a Github action to publish the package to PyPI.
+
+Note: Until we're configured, just do this to release:
+
+```
+pip install -U build twine
+python -m build
+twine upload dist/*
+```
