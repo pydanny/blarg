@@ -41,6 +41,9 @@ dev = [
 [tool.setuptools]
 package-dir = {"" = "src"}
 
+[tool.setuptools.package-data]
+blarg = ["templates/*.html"]
+
 [project.scripts]
 blarg = "blarg.cli:app"
 
