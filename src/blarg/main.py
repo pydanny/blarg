@@ -1,5 +1,6 @@
 import shutil
 from pathlib import Path
+from urllib.parse import quote
 
 import yaml
 from jinja2 import (
@@ -9,7 +10,7 @@ from jinja2 import (
     PackageLoader,
     select_autoescape,
 )
-from markupsafe import Markup
+from markupsafe import Markup, escape
 from rich import print
 from rich.progress import track
 
@@ -74,8 +75,8 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
     # Index
     index = "<ul>"
     for article in articles:
-        link = article.relative_to(target)
-        index += f'\n<li><a href="{link}">{article}</a></li>'
+        link = quote(article.relative_to(target).as_posix())
+        index += f'\n<li><a href="{escape(link)}">{escape(article)}</a></li>'
     index += "</ul>"
     target_index = target / "index.html"
 
