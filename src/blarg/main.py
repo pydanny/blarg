@@ -49,7 +49,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
         target_file = target / Path(page.name).with_suffix("") / Path("index.html")
         target_file.parent.mkdir(parents=True, exist_ok=True)
 
-        body = markdown.convert(text)
+        body = markdown.reset().convert(text)
         # try:
         try:
             target_file.write_text(
