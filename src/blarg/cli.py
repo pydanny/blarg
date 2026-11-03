@@ -1,4 +1,5 @@
 import importlib.metadata
+import sys
 from pathlib import Path
 from subprocess import check_call
 
@@ -20,7 +21,7 @@ def build(source: Path = Path("."), target: Path = Path("site")):
 @app.command()
 def serve(site: Path = Path("site")):
     """Serve the site"""
-    check_call(["python", "-m", "http.server", "8000", "-d", site])
+    check_call([sys.executable, "-m", "http.server", "8000", "-d", site])
 
 
 @app.command()
