@@ -37,7 +37,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
     
 
     pages = list(source.rglob("*.md"))
-    articles = [target / Path(x.name).with_suffix("") for x in pages]
+    articles = []
     page_build_count = 0
 
     for page in track(pages, description=f"Building {len(pages)} pages"):
@@ -64,6 +64,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
         except yaml.composer.ComposerError:
             print(f"[bold red]Error composing frontmatter for {page}[/bold red]")
             continue
+        articles.append(target_file.parent)
         page_build_count += 1
 
     # Pygments colors
