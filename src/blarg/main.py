@@ -15,6 +15,7 @@ from rich.progress import track
 
 from .mdconfig import md as markdown
 from .mdconfig import render_pygments_css
+from .tag_index import write_tag_index
 
 
 # Load templates
@@ -39,6 +40,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
     pages = list(source.rglob("*.md"))
     articles = [target / Path(x.name).with_suffix("") for x in pages]
     page_build_count = 0
+    tagged_pages = []
 
     for page in track(pages, description=f"Building {len(pages)} pages"):
         if "node_modules" in page.parts:
@@ -52,8 +54,9 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
         body = markdown.convert(text)
         # try:
         try:
+            metadata = yaml.safe_load(frontmatter)
             target_file.write_text(
-                template.render(body=Markup(body), frontmatter=yaml.safe_load(frontmatter))
+                template.render(body=Markup(body), frontmatter=metadata)
             )
         except yaml.parser.ParserError:
             print(f"[bold red]Error parsing frontmatter for {page}[/bold red]")
@@ -65,6 +68,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
             print(f"[bold red]Error composing frontmatter for {page}[/bold red]")
             continue
         page_build_count += 1
+        tagged_pages.append((page, target_file, metadata))
 
     # Pygments colors
     target_css = target / "public" / "pygments.css"
@@ -82,5 +86,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
     target_index.write_text(
         template.render(body=Markup(index), frontmatter={"title": "Index"})
     )
+
+    write_tag_index(source, target, template, tagged_pages)
 
     print(f"[bold green]Done building {page_build_count} files[/bold green]")
