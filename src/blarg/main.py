@@ -83,4 +83,23 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
         template.render(body=Markup(index), frontmatter={"title": "Index"})
     )
 
+    if not (target / "404.html").exists() and not (target / "404/index.html").exists():
+        not_found = Markup(
+            "<p>This page wandered off. Our robot is looking for it.</p>"
+            '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" '
+            'width="240" height="180" role="img" aria-label="A puzzled robot looking for a lost page">'
+            '<rect x="60" y="50" width="120" height="95" rx="20" fill="#8ac6d1" stroke="#243746" stroke-width="4"/>'
+            '<path d="M120 50V25M90 145v20M150 145v20" stroke="#243746" stroke-width="6"/>'
+            '<circle cx="120" cy="20" r="8" fill="#eaa84b"/>'
+            '<circle cx="95" cy="85" r="10" fill="#243746"/>'
+            '<circle cx="145" cy="85" r="10" fill="#243746"/>'
+            '<path d="M98 120q22-18 44 0" fill="none" stroke="#243746" stroke-width="5"/>'
+            '<text x="195" y="45" font-size="36" fill="#243746">?</text>'
+            "</svg>"
+        )
+        (target / "404.html").write_text(
+            template.render(body=not_found, frontmatter={"title": "404 - Blarg"}),
+            encoding="utf-8",
+        )
+
     print(f"[bold green]Done building {page_build_count} files[/bold green]")
