@@ -1,6 +1,7 @@
 import importlib.metadata
 from pathlib import Path
 from subprocess import check_call
+from typing import Optional
 
 import typer
 from rich import print
@@ -12,9 +13,14 @@ app = typer.Typer()
 
 
 @app.command()
-def build(source: Path = Path("."), target: Path = Path("site")):
+def build(
+    source: Path = Path("."),
+    target: Path = Path("site"),
+    site_url: Optional[str] = None,
+    feed_title: str = "Blarg",
+):
     """Build the site"""
-    build_site(source, target)
+    build_site(source, target, site_url=site_url, feed_title=feed_title)
 
 
 @app.command()
