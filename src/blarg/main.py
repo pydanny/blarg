@@ -15,6 +15,7 @@ from rich.progress import track
 
 from .mdconfig import md as markdown
 from .mdconfig import render_pygments_css
+from .rss import validate_options, write_feed
 
 
 # Load templates
@@ -24,7 +25,13 @@ template_env = Environment(
 )
 
 
-def build_site(source: Path, target: Path, template: Path = "default.html") -> None:
+def build_site(source: Path, target: Path, template: Path = "default.html", *, site_url: str | None = None, feed_title: str = "Blarg") -> None:
+    site_url = validate_options(site_url, feed_title)
+    if site_url is not None and any(
+        page.stem == "rss.xml" and "node_modules" not in page.parts
+        for page in source.rglob("*.md")
+    ):
+        raise ValueError("rss.xml is reserved when RSS is enabled")
     # Cleanup build directory
     try:
         shutil.rmtree(target)
@@ -39,6 +46,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
     pages = list(source.rglob("*.md"))
     articles = [target / Path(x.name).with_suffix("") for x in pages]
     page_build_count = 0
+    feed_pages = []
 
     for page in track(pages, description=f"Building {len(pages)} pages"):
         if "node_modules" in page.parts:
@@ -52,8 +60,9 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
         body = markdown.convert(text)
         # try:
         try:
+            metadata = yaml.safe_load(frontmatter)
             target_file.write_text(
-                template.render(body=Markup(body), frontmatter=yaml.safe_load(frontmatter))
+                template.render(body=Markup(body), frontmatter=metadata)
             )
         except yaml.parser.ParserError:
             print(f"[bold red]Error parsing frontmatter for {page}[/bold red]")
@@ -65,6 +74,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
             print(f"[bold red]Error composing frontmatter for {page}[/bold red]")
             continue
         page_build_count += 1
+        feed_pages.append((page, target_file, metadata))
 
     # Pygments colors
     target_css = target / "public" / "pygments.css"
@@ -82,5 +92,7 @@ def build_site(source: Path, target: Path, template: Path = "default.html") -> N
     target_index.write_text(
         template.render(body=Markup(index), frontmatter={"title": "Index"})
     )
+
+    write_feed(source, target, site_url, feed_title, feed_pages)
 
     print(f"[bold green]Done building {page_build_count} files[/bold green]")
